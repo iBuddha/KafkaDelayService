@@ -1,0 +1,44 @@
+<configuration>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/application.log</file>
+        <encoder>
+           <pattern>%date - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNCFILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <logger name="org.apache.kafka" level="DEBUG" />
+    <!--<logger name="kafka.offset.monitor" level="INFO" />-->
+
+    <!-- Off these ones as they are annoying, and anyway we manage configuration ourself -->
+    <logger name="org.apache.zookeeper" level="WARN"/>
+    <logger name="org.apache.kafka.clients.producer.ProducerConfig" level="WARN"/>
+    <logger name="org.apache.kafka.clients.consumer.ConsumerConfig" level="WARN"/>
+    <logger name="org.apache.kafka.common.utils.AppInfoParser" level="ERROR"/>
+
+    <root level="DEBUG">
+        <!--<appender-ref ref="ASYNCFILE" />-->
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
