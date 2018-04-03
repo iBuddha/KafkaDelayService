@@ -1,11 +1,11 @@
 # 功能
 构建于Kafka之上的延迟队列。用户使用三个相关联的topic实现延迟队列的功能。
 
-以名为apple的topic为例，用户可以把从apple里读取但尚不能处理的消息发给apple-delay这个topic，消息的key为消息的到期时间(为一个时间戳)，等消息到期后，它会出现在apple-expired这个topic里。
+以名为apple的topic为例，用户可以把从apple里读取但尚不能处理的消息发给apple-delay这个topic，消息的key为消息的到期时间(为一个时间戳)，等消息到期后，它会出现在apple-expired这个topic里。此外，用户需要建一个名为apple-delay-meta的topic, 并把它的cleanup.policy设为compact, KafkaDelayService会使用此topic储存被延迟消息的metadata。
 
-用户需要建立三个其名称满足上述规律并有相同分区数量的topic，Kafka delay service会发现有这样规律的一组topic并自动为其建立延迟服务。
+用户需要建立四个其名称满足上述规律并有相同分区数量的topic，Kafka delay service会发现有这样规律的一组topic并自动为其建立延迟服务。
 
-
+用户可以基于此服务自己封装Kafka客户端，以隐藏上述实现细节。比如，当consumer订阅apple这个topic时，封装后的客户端同时自动订阅apple-expired这个topic。
 
 # 启动
 
